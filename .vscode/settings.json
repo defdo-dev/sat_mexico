@@ -1,0 +1,8 @@
+{
+  "files.associations": {
+    "docker-compose*": "yaml",
+    "[Dd]ockerfile*": "dockerfile",
+    "*.heex": "phoenix-heex",
+    "plyconfig.json": "jsonc"
+  }
+}
