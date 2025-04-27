@@ -32,8 +32,7 @@ defmodule SAT.MixProject do
   defp package do
     [
       files: ~w(lib CHANGELOG.md LICENSE.md mix.exs README.md VERSION .formatter.exs),
-      description:
-        "An approach to interacting with invoices for SAT Mexico.",
+      description: "An approach to interacting with invoices for SAT Mexico.",
       licenses: ["Apache-2.0"],
       links: %{
         "GitHub" => @source_url
@@ -55,15 +54,26 @@ defmodule SAT.MixProject do
     ]
   end
 
-   defp docs do
+  defp docs do
     [
-      main: "SAT",
+      main: "readme",
       logo: "logo.png",
       source_url: @source_url,
       source_ref: "v#{@version}",
       extras: [
-        "CHANGELOG.md"
+        "README.md",
+        "LICENSE.md",
+        "CHANGELOG.md",
+        "lib/sat/guides/isr_report.md"
+      ],
+      groups_for_extras: [
+        "Getting Started": ["README.md"],
+        "User Guides": ~r/lib\/sat\/guides\/user\/.?/,
+        "Developer Guides": ~r/lib\/sat\/guides\/dev\/.?/,
+        "API Reference": ~r/lib\/sat\/guides\/api\/.?/,
+        "Legal": ["LICENSE.md"],
+        "Changelog": ["CHANGELOG.md"]
       ]
     ]
-   end
+  end
 end
