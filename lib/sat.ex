@@ -7,5 +7,4 @@ defmodule SAT do
 
   Also we are capable for generating a report for withholding ISR (Impuesto Sobre la Renta) taxes via `SAT.Report.ISR`.
   """
-
 end

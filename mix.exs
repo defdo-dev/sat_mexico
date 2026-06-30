@@ -72,8 +72,8 @@ defmodule SAT.MixProject do
         "User Guides": ~r/lib\/sat\/guides\/user\/.?/,
         "Developer Guides": ~r/lib\/sat\/guides\/dev\/.?/,
         "API Reference": ~r/lib\/sat\/guides\/api\/.?/,
-        "Legal": ["LICENSE.md"],
-        "Changelog": ["CHANGELOG.md"]
+        Legal: ["LICENSE.md"],
+        Changelog: ["CHANGELOG.md"]
       ]
     ]
   end

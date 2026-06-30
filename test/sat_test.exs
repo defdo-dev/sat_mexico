@@ -69,7 +69,11 @@ defmodule SATTest do
 
       # Test round_withholdings_detailed
       detailed_withholdings = [
-        %{tax_id: "XEX150902KXA", incoming: Decimal.new("2828.51"), withheld: Decimal.new("35.36")}
+        %{
+          tax_id: "XEX150902KXA",
+          incoming: Decimal.new("2828.51"),
+          withheld: Decimal.new("35.36")
+        }
       ]
 
       rounded_detailed = ISR.round_withholdings_detailed(detailed_withholdings)
