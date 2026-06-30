@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1 (2026-06-29)
+
+- Relax `decimal` constraint to `~> 2.1 or ~> 3.0` for compatibility with
+  `ecto_sql ~> 3.14`.
+
 ## 0.2.0 (2025-04-27)
 
 - Support for processing ZIP files containing XML invoices.

@@ -2,7 +2,7 @@ defmodule SAT.MixProject do
   @moduledoc false
   use Mix.Project
 
-  @version File.read!("VERSION")
+  @version File.read!("VERSION") |> String.trim()
   @source_url "https://github.com/defdo-dev/sat_mexico"
 
   def project do
@@ -47,10 +47,10 @@ defmodule SAT.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:decimal, "~> 2.1"},
+      {:decimal, "~> 2.1 or ~> 3.0"},
       {:saxy, "~> 1.5"},
       {:ex_doc, ">= 0.0.0", only: [:dev, :docs]},
-      {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false}
+      {:mix_test_watch, "~> 1.2", only: :dev, runtime: false}
     ]
   end
 
