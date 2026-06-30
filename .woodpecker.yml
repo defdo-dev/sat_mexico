@@ -1,0 +1,90 @@
+# ─── sat_mexico Woodpecker CI/CD ─────────────────────────────────────────
+#
+# Events:
+#   push / pull_request → format check, compile, test
+#   tag                 → validate + publish to Hex.pm
+#   manual              → CI run
+
+when:
+  - event: [push, pull_request]
+    branch: main
+  - event: tag
+  - event: manual
+
+steps:
+  # ═══════════════════════════════════════════════════════════════════════
+  #  CI
+  # ═══════════════════════════════════════════════════════════════════════
+
+  - name: format-and-compile
+    image: elixir:1.19.5
+    when:
+      event: [push, pull_request]
+    commands:
+      - mix do local.hex --force, local.rebar --force
+      - mix deps.get
+      - mix format --check-formatted
+      - mix compile --warnings-as-errors
+
+  - name: test
+    image: elixir:1.19.5
+    when:
+      event: [push, pull_request]
+    commands:
+      - mix do local.hex --force, local.rebar --force
+      - mix deps.get
+      - mix compile --warnings-as-errors
+      - mix test
+
+  # ═══════════════════════════════════════════════════════════════════════
+  #  RELEASE — tag events
+  # ═══════════════════════════════════════════════════════════════════════
+
+  - name: release-validate
+    image: elixir:1.19.5
+    when:
+      event: tag
+    environment:
+      HEX_API_KEY:
+        from_secret: hex_api_key
+    commands:
+      - mix do local.hex --force, local.rebar --force
+      - mix deps.get
+      - mix format --check-formatted
+      - mix compile --warnings-as-errors
+      - mix test
+      - mix hex.build
+
+  - name: hex-publish
+    image: elixir:1.19.5
+    when:
+      event: tag
+    depends_on: [release-validate]
+    environment:
+      HEX_API_KEY:
+        from_secret: hex_api_key
+    commands:
+      - |
+        set -e
+        if [ -z "$HEX_API_KEY" ]; then
+          echo "ERROR: HEX_API_KEY is required to publish"
+          exit 1
+        fi
+        mix do local.hex --force, local.rebar --force
+        mix deps.get
+        mix hex.publish --yes
+
+  # ═══════════════════════════════════════════════════════════════════════
+  #  MANUAL
+  # ═══════════════════════════════════════════════════════════════════════
+
+  - name: manual-ci
+    image: elixir:1.19.5
+    when:
+      event: manual
+    commands:
+      - mix do local.hex --force, local.rebar --force
+      - mix deps.get
+      - mix format --check-formatted
+      - mix compile --warnings-as-errors
+      - mix test
