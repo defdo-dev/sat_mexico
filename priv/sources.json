@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "verified_on": "2026-10-20",
+  "sources": [
+    {
+      "id": "cfdi-4.0-catalogs",
+      "url": "https://wwwmat.sat.gob.mx/cs/Satellite?blobcol=urldata&blobkey=id&blobtable=MungoBlobs&blobwhere=1461176418069&ssbinary=true",
+      "discovery_page_url": "https://wwwmat.sat.gob.mx/consultas/22035/facturacion-con-estimulo-en-la-region-fronteriza-",
+      "discovery_link_text": "Catálogos CFDI versión 4.0.",
+      "filename": "catCFDI_V_4_20250213.xls",
+      "content_length": 48260096,
+      "last_modified_reliable": false,
+      "cfdi_version": "4.0",
+      "complement_version": null,
+      "expected_sheets": [
+        {"sheet_name": "c_RegimenFiscal", "header_row": 6},
+        {"sheet_name": "c_UsoCFDI", "header_row": 5},
+        {"sheet_name": "c_TipoDeComprobante", "header_row": 5},
+        {"sheet_name": "c_FormaPago", "header_row": 6},
+        {"sheet_name": "c_MetodoPago", "header_row": 6},
+        {"sheet_name": "c_Impuesto", "header_row": 5},
+        {"sheet_name": "c_TipoFactor", "header_row": 5},
+        {"sheet_name": "c_ObjetoImp", "header_row": 5},
+        {"sheet_name": "c_TipoRelacion", "header_row": 5},
+        {"sheet_name": "c_Exportacion", "header_row": 5},
+        {"sheet_name": "c_Moneda", "header_row": 5},
+        {"sheet_name": "c_Periodicidad", "header_row": 5},
+        {"sheet_name": "c_Meses", "header_row": 5},
+        {"sheet_name": "c_TasaOCuota", "header_row": 5}
+      ],
+      "last_modified": "Tue, 20 Oct 2026 15:00:09 GMT",
+      "etag": null,
+      "sha256": "05f6615dbd22853702de0d87e78a665f5b3b9126302d3a4463d32fdb96ac17e7"
+    },
+    {
+      "id": "cfdi-4.0-catcfdi-xsd",
+      "url": "https://wwwmat.sat.gob.mx/cs/Satellite?blobcol=urldata&blobkey=id&blobtable=MungoBlobs&blobwhere=1461175174666&ssbinary=true",
+      "discovery_page_url": "https://wwwmat.sat.gob.mx/cs/Satellite?c=ConsultaInfo&childpagename=SatTyR%2FConsultaInfo%2FSAT_LandingConsultaInformacion&cid=1462241943074&packedargs=d%3DTouch&pagename=TySWrapper",
+      "discovery_link_text": "Catálogo de datos de CFDI versión 4.0 (xsd)",
+      "filename": "catCFDI.zip",
+      "content_length": 402798,
+      "last_modified_reliable": false,
+      "archive_member": "catCFDI.xsd",
+      "cfdi_version": "4.0",
+      "complement_version": null,
+      "expected_sheets": [],
+      "last_modified": "Tue, 20 Oct 2026 15:00:09 GMT",
+      "etag": null,
+      "sha256": "217e9dd30ee0bb235ab232e1d167948248e9dd962f34bdc90f79df942db544b3"
+    }
+  ]
+}

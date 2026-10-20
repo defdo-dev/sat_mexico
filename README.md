@@ -1,6 +1,6 @@
 # SAT Mexico
 
-A comprehensive Elixir library for interacting with Mexican tax authority (SAT - Servicio de Administración Tributaria) invoices and generating tax reports.
+An Elixir library that imports reference catalogs from official SAT sources and reads Mexican CFDI XML.
 
 ## Features
 
@@ -8,7 +8,7 @@ A comprehensive Elixir library for interacting with Mexican tax authority (SAT -
 - ISR Tax Reporting: Generate withholding tax (ISR - Impuesto Sobre la Renta) reports from invoice data
 - Batch Processing: Process multiple invoices from directories, including nested XML files and ZIPs
 - SAT Compliant: Implements official SAT rounding rules and tax calculations
-- Reference Data: Includes up-to-date catalogs for tax regimes and CFDI usage codes
+- Reference Data: Checks official SAT source files and includes catalogs for tax regimes and CFDI usage codes
 
 ## Installation
 
@@ -54,7 +54,7 @@ Enum.each(result, fn %{tax_id: tax_id, incoming: incoming, withheld: withheld} -
 end)
 ```
 
-For more detailed examples, see the [ISR Report Guide](/lib/sat/guides/isr_report.md).
+For more detailed examples, see the [ISR Report Guide](lib/sat/guides/isr_report.md).
 
 ## Reference Data
 

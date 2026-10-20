@@ -24,16 +24,13 @@ defmodule SAT.MixProject do
 
   # Run "mix help compile.app" to learn about applications.
   def application do
-    [
-      extra_applications: [:logger],
-      mod: {SAT.Application, []}
-    ]
+    [extra_applications: [:logger]]
   end
 
   defp package do
     [
-      files: ~w(lib CHANGELOG.md LICENSE.md mix.exs README.md VERSION .formatter.exs),
-      description: "An approach to interacting with invoices for SAT Mexico.",
+      files: ~w(lib priv CHANGELOG.md LICENSE.md mix.exs README.md VERSION .formatter.exs),
+      description: "SAT catalog importer and CFDI reader for Mexico.",
       licenses: ["Apache-2.0"],
       links: %{
         "GitHub" => @source_url
@@ -49,6 +46,8 @@ defmodule SAT.MixProject do
   defp deps do
     [
       {:decimal, "~> 2.1 or ~> 3.0"},
+      {:jason, "~> 1.4"},
+      {:req, "~> 0.7.0"},
       {:saxy, "~> 1.5"},
       {:ex_doc, ">= 0.0.0", only: [:dev, :docs]},
       {:mix_test_watch, "~> 1.2", only: :dev, runtime: false}
