@@ -5,6 +5,9 @@
 #   tag                 → validate + publish to Hex.pm
 #   manual              → CI run
 
+labels:
+  platform: linux/amd64
+
 when:
   - event: [push, pull_request]
     branch: main
@@ -17,21 +20,21 @@ steps:
   # ═══════════════════════════════════════════════════════════════════════
 
   - name: format-and-compile
-    image: elixir:1.19.5
+    image: elixir:1.20.4
     when:
       event: [push, pull_request]
     commands:
-      - mix do local.hex --force, local.rebar --force
+      - mix do local.hex --force + local.rebar --force
       - mix deps.get
       - mix format --check-formatted
       - mix compile --warnings-as-errors
 
   - name: test
-    image: elixir:1.19.5
+    image: elixir:1.20.4
     when:
       event: [push, pull_request]
     commands:
-      - mix do local.hex --force, local.rebar --force
+      - mix do local.hex --force + local.rebar --force
       - mix deps.get
       - mix compile --warnings-as-errors
       - mix test
@@ -41,14 +44,14 @@ steps:
   # ═══════════════════════════════════════════════════════════════════════
 
   - name: release-validate
-    image: elixir:1.19.5
+    image: elixir:1.20.4
     when:
       event: tag
     environment:
       HEX_API_KEY:
         from_secret: hex_api_key
     commands:
-      - mix do local.hex --force, local.rebar --force
+      - mix do local.hex --force + local.rebar --force
       - mix deps.get
       - mix format --check-formatted
       - mix compile --warnings-as-errors
@@ -56,7 +59,7 @@ steps:
       - mix hex.build
 
   - name: hex-publish
-    image: elixir:1.19.5
+    image: elixir:1.20.4
     when:
       event: tag
     depends_on: [release-validate]
@@ -70,7 +73,7 @@ steps:
           echo "ERROR: HEX_API_KEY is required to publish"
           exit 1
         fi
-        mix do local.hex --force, local.rebar --force
+        mix do local.hex --force + local.rebar --force
         mix deps.get
         mix hex.publish --yes
 
@@ -79,11 +82,11 @@ steps:
   # ═══════════════════════════════════════════════════════════════════════
 
   - name: manual-ci
-    image: elixir:1.19.5
+    image: elixir:1.20.4
     when:
       event: manual
     commands:
-      - mix do local.hex --force, local.rebar --force
+      - mix do local.hex --force + local.rebar --force
       - mix deps.get
       - mix format --check-formatted
       - mix compile --warnings-as-errors
