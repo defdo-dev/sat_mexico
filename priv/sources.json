@@ -1,0 +1,31 @@
+[
+  {
+    "id": "cfdi_4_0_catalogs",
+    "url": "https://omawww.sat.gob.mx/tramitesyservicios/Paginas/documentos/catCFDI_V_4_23032023.xls",
+    "discovery_page_url": "https://omawww.sat.gob.mx/tramitesyservicios/Paginas/anexo_20.htm",
+    "discovery_match": "catCFDI",
+    "expected_extension": ".xls",
+    "discover_on_each_check": true,
+    "sheet_name": "c_FormaPago",
+    "header_row": 6,
+    "version": "CFDI 4.0",
+    "checked_on": "2026-10-20",
+    "last_modified": "Fri, 24 Mar 2023 18:00:41 GMT",
+    "etag": "\"{ED736C5F-5653-4129-B417-D8B43217933C},1\"",
+    "sha256": "f10d87d907e52ce636b25a883eea83b81fa3bf77363cd7e47272176424f17dc0"
+  },
+  {
+    "id": "cfdi_4_0_catalog_schema",
+    "url": "https://www.sat.gob.mx/sitio_internet/cfd/catalogos/catCFDI.xsd",
+    "discovery_page_url": "https://wwwmat.sat.gob.mx/cs/Satellite?c=ConsultaInfo&childpagename=SatTyR%2FConsultaInfo%2FSAT_LandingConsultaInformacion&cid=1462241943074&packedargs=d%3DTouch&pagename=TySWrapper",
+    "discovery_match": "Catálogo de datos de CFDI",
+    "expected_extension": ".xsd",
+    "sheet_name": null,
+    "header_row": null,
+    "version": "CFDI 4.0",
+    "checked_on": "2026-10-20",
+    "last_modified": "Fri, 13 Dec 2024 19:59:34 GMT",
+    "etag": "\"e29ac5164fd253d5734a4d931127ecd2\"",
+    "sha256": "6c58936cb77576f839a4d7915953ceaf252b9eb9319f9458fe5bb67ae2bb0bb1"
+  }
+]

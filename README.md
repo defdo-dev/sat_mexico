@@ -1,14 +1,14 @@
 # SAT Mexico
 
-A comprehensive Elixir library for interacting with Mexican tax authority (SAT - Servicio de Administración Tributaria) invoices and generating tax reports.
+sat_mexico is the Elixir library for importing official SAT catalogs and reading CFDI XML. It currently provides CFDI parsing, ISR reporting, and a source manifest/checker for official SAT files. Catalog imports and date-aware catalog lookups are still pending.
 
 ## Features
 
-- CFDI XML Parsing: Transform CFDI (Comprobante Fiscal Digital por Internet) invoices from XML format to structured Elixir maps
-- ISR Tax Reporting: Generate withholding tax (ISR - Impuesto Sobre la Renta) reports from invoice data
-- Batch Processing: Process multiple invoices from directories, including nested XML files and ZIPs
-- SAT Compliant: Implements official SAT rounding rules and tax calculations
-- Reference Data: Includes up-to-date catalogs for tax regimes and CFDI usage codes
+- CFDI XML parsing into structured Elixir maps
+- ISR withholding reports from invoice data
+- Batch processing of XML and ZIP files in nested directories
+- SAT source tracking for the CFDI 4.0 catalog workbook and catalog schema
+- Existing tax regime and CFDI usage helpers; catalog importing and date-aware lookups are pending
 
 ## Installation
 
@@ -54,14 +54,15 @@ Enum.each(result, fn %{tax_id: tax_id, incoming: incoming, withheld: withheld} -
 end)
 ```
 
-For more detailed examples, see the [ISR Report Guide](/lib/sat/guides/isr_report.md).
+## Catalog Sources
 
-## Reference Data
+Check the pinned official SAT source files with:
 
-The library includes comprehensive reference data for:
+```sh
+mix sat.catalogs.check
+```
 
-- Tax Regimes: Complete catalog of Mexican tax regimes with validity dates and applicability
-- CFDI Usage Codes: Full catalog of CFDI usage codes with descriptions and validity information
+The command prints one status per source and exits non-zero if a source changed or could not be reached. Pass `--update` to write the current URLs, HTTP metadata, and SHA-256 values to `priv/sources.json`.
 
 ## Documentation
 
