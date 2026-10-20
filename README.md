@@ -10,6 +10,13 @@ An Elixir library that imports reference catalogs from official SAT sources and 
 - SAT Compliant: Implements official SAT rounding rules and tax calculations
 - Reference Data: Checks official SAT source files and includes catalogs for tax regimes and CFDI usage codes
 
+### Check SAT source revisions
+
+Run `mix sat.catalogs.check` to compare the packaged source manifest with the
+current links on SAT's Anexo 20 page. It prints one status line per source and
+returns a non-zero exit status if any source changed or is unreachable. Pass
+`--update` to write the new metadata and SHA-256 hashes to `priv/sources.json`.
+
 ## Installation
 
 Add sat_mexico to your list of dependencies in mix.exs:

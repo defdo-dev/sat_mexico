@@ -1,52 +1,93 @@
 {
-  "version": 1,
-  "verified_on": "2026-10-20",
   "sources": [
     {
-      "id": "cfdi-4.0-catalogs",
-      "url": "https://wwwmat.sat.gob.mx/cs/Satellite?blobcol=urldata&blobkey=id&blobtable=MungoBlobs&blobwhere=1461176418069&ssbinary=true",
-      "discovery_page_url": "https://wwwmat.sat.gob.mx/consultas/22035/facturacion-con-estimulo-en-la-region-fronteriza-",
-      "discovery_link_text": "Catálogos CFDI versión 4.0.",
-      "filename": "catCFDI_V_4_20250213.xls",
-      "content_length": 48260096,
-      "last_modified_reliable": false,
       "cfdi_version": "4.0",
       "complement_version": null,
+      "content_length": 48774656,
+      "discovery_link_text": "Catálogos CFDI Versión 4.0 (xls)",
+      "discovery_page_url": "http://omawww.sat.gob.mx/tramitesyservicios/Paginas/anexo_20.htm",
+      "etag": "\"{E7E51874-8C0A-4E8B-9EC3-4283E85BBBD3},1\"",
       "expected_sheets": [
-        {"sheet_name": "c_RegimenFiscal", "header_row": 6},
-        {"sheet_name": "c_UsoCFDI", "header_row": 5},
-        {"sheet_name": "c_TipoDeComprobante", "header_row": 5},
-        {"sheet_name": "c_FormaPago", "header_row": 6},
-        {"sheet_name": "c_MetodoPago", "header_row": 6},
-        {"sheet_name": "c_Impuesto", "header_row": 5},
-        {"sheet_name": "c_TipoFactor", "header_row": 5},
-        {"sheet_name": "c_ObjetoImp", "header_row": 5},
-        {"sheet_name": "c_TipoRelacion", "header_row": 5},
-        {"sheet_name": "c_Exportacion", "header_row": 5},
-        {"sheet_name": "c_Moneda", "header_row": 5},
-        {"sheet_name": "c_Periodicidad", "header_row": 5},
-        {"sheet_name": "c_Meses", "header_row": 5},
-        {"sheet_name": "c_TasaOCuota", "header_row": 5}
+        {
+          "header_row": 6,
+          "sheet_name": "c_RegimenFiscal"
+        },
+        {
+          "header_row": 5,
+          "sheet_name": "c_UsoCFDI"
+        },
+        {
+          "header_row": 5,
+          "sheet_name": "c_TipoDeComprobante"
+        },
+        {
+          "header_row": 6,
+          "sheet_name": "c_FormaPago"
+        },
+        {
+          "header_row": 6,
+          "sheet_name": "c_MetodoPago"
+        },
+        {
+          "header_row": 5,
+          "sheet_name": "c_Impuesto"
+        },
+        {
+          "header_row": 5,
+          "sheet_name": "c_TipoFactor"
+        },
+        {
+          "header_row": 5,
+          "sheet_name": "c_ObjetoImp"
+        },
+        {
+          "header_row": 5,
+          "sheet_name": "c_TipoRelacion"
+        },
+        {
+          "header_row": 5,
+          "sheet_name": "c_Exportacion"
+        },
+        {
+          "header_row": 5,
+          "sheet_name": "c_Moneda"
+        },
+        {
+          "header_row": 5,
+          "sheet_name": "c_Periodicidad"
+        },
+        {
+          "header_row": 5,
+          "sheet_name": "c_Meses"
+        },
+        {
+          "header_row": 5,
+          "sheet_name": "c_TasaOCuota"
+        }
       ],
-      "last_modified": "Tue, 20 Oct 2026 15:00:09 GMT",
-      "etag": null,
-      "sha256": "05f6615dbd22853702de0d87e78a665f5b3b9126302d3a4463d32fdb96ac17e7"
+      "filename": "catCFDI_V_4_20261015.xls",
+      "id": "cfdi-4.0-catalogs",
+      "last_modified": "Thu, 15 Oct 2026 15:08:36 GMT",
+      "last_modified_reliable": true,
+      "sha256": "fde78b456d1e0d90366bfc68f8312f9edce5703ad5dc8ccebf09c462db13a079",
+      "url": "http://omawww.sat.gob.mx/tramitesyservicios/Paginas/documentos/catCFDI_V_4_20261015.xls"
     },
     {
-      "id": "cfdi-4.0-catcfdi-xsd",
-      "url": "https://wwwmat.sat.gob.mx/cs/Satellite?blobcol=urldata&blobkey=id&blobtable=MungoBlobs&blobwhere=1461175174666&ssbinary=true",
-      "discovery_page_url": "https://wwwmat.sat.gob.mx/cs/Satellite?c=ConsultaInfo&childpagename=SatTyR%2FConsultaInfo%2FSAT_LandingConsultaInformacion&cid=1462241943074&packedargs=d%3DTouch&pagename=TySWrapper",
-      "discovery_link_text": "Catálogo de datos de CFDI versión 4.0 (xsd)",
-      "filename": "catCFDI.zip",
-      "content_length": 402798,
-      "last_modified_reliable": false,
-      "archive_member": "catCFDI.xsd",
       "cfdi_version": "4.0",
       "complement_version": null,
+      "content_length": 5984046,
+      "discovery_link_text": "Catálogo de datos (xsd",
+      "discovery_page_url": "http://omawww.sat.gob.mx/tramitesyservicios/Paginas/anexo_20.htm",
+      "etag": "\"e29ac5164fd253d5734a4d931127ecd2\"",
       "expected_sheets": [],
-      "last_modified": "Tue, 20 Oct 2026 15:00:09 GMT",
-      "etag": null,
-      "sha256": "217e9dd30ee0bb235ab232e1d167948248e9dd962f34bdc90f79df942db544b3"
+      "filename": "catCFDI.xsd",
+      "id": "cfdi-4.0-catcfdi-xsd",
+      "last_modified": "Fri, 13 Dec 2024 19:59:34 GMT",
+      "last_modified_reliable": true,
+      "sha256": "a824bc7739e226e1b40ea0f8c4e4f4c6f796fc3b4abfa6e9abe3bd119a30d938",
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/catalogs/catCFDI.xsd"
     }
-  ]
+  ],
+  "verified_on": "2026-10-20",
+  "version": 1
 }

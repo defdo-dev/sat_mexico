@@ -7,13 +7,14 @@ defmodule SAT.Catalogs.Check do
   `:get_range` is a one-byte GET used when a source rejects HEAD.
   """
 
-  @manifest_path "priv/sources.json"
-
   @type http_response :: %{status: pos_integer(), headers: map(), body: binary() | nil}
   @type http_fun :: (atom(), String.t() -> {:ok, http_response()} | {:error, term()})
 
+  @spec check(keyword()) :: {:ok, [map()]} | {:error, term()}
   @spec check(Path.t(), keyword()) :: {:ok, [map()]} | {:error, term()}
-  def check(path \\ @manifest_path, opts \\ []) do
+  def check(opts) when is_list(opts), do: check(packaged_manifest_path(), opts)
+
+  def check(path \\ packaged_manifest_path(), opts \\ []) do
     http = Keyword.get(opts, :http, &request/2)
 
     with {:ok, contents} <- File.read(path),
@@ -49,25 +50,7 @@ defmodule SAT.Catalogs.Check do
   end
 
   defp current_source(source, http) do
-    case call_http(http, :head, source["url"]) do
-      {:ok, %{status: 404}} ->
-        discover_and_head(source, http)
-
-      {:ok, %{status: status, headers: headers}} when status in 200..299 ->
-        filename = response_filename(headers) || source["filename"]
-
-        if filename != source["filename"] do
-          discover_and_head(source, http)
-        else
-          {:ok, source["url"], headers}
-        end
-
-      {:ok, %{status: status}} ->
-        {:error, {:http_status, status}}
-
-      {:error, reason} ->
-        {:error, reason}
-    end
+    discover_and_head(source, http)
   end
 
   defp discover_and_head(source, http) do
@@ -183,12 +166,45 @@ defmodule SAT.Catalogs.Check do
   defp normalize_link_text(content) do
     content
     |> String.replace(~r/<[^>]+>/, " ")
-    |> String.replace("&nbsp;", " ")
-    |> String.replace("&#160;", " ")
-    |> String.replace("&amp;", "&")
+    |> decode_html_entities()
+    |> String.replace(~r/[\x{200B}\x{FEFF}]/u, "")
     |> String.replace(~r/\s+/, " ")
     |> String.trim()
     |> String.downcase()
+  end
+
+  defp decode_html_entities(text) do
+    Regex.replace(~r/&(#x[0-9a-f]+|#\d+|[a-z][a-z0-9]+);/i, text, fn entity, name ->
+      case String.downcase(name) do
+        "amp" -> "&"
+        "lt" -> "<"
+        "gt" -> ">"
+        "quot" -> "\""
+        "apos" -> "'"
+        "nbsp" -> " "
+        "aacute" -> "á"
+        "eacute" -> "é"
+        "iacute" -> "í"
+        "oacute" -> "ó"
+        "uacute" -> "ú"
+        "ntilde" -> "ñ"
+        "uuml" -> "ü"
+        "#" <> digits -> decode_numeric_entity(String.downcase(digits), entity)
+        _ -> entity
+      end
+    end)
+  end
+
+  defp decode_numeric_entity("x" <> hex, original), do: decode_codepoint(hex, 16, original)
+  defp decode_numeric_entity(digits, original), do: decode_codepoint(digits, 10, original)
+
+  defp decode_codepoint(digits, base, original) do
+    case Integer.parse(digits, base) do
+      {codepoint, ""} when codepoint in 0..0x10FFFF -> <<codepoint::utf8>>
+      _ -> original
+    end
+  rescue
+    _ -> original
   end
 
   defp response_filename(headers) do
@@ -211,13 +227,20 @@ defmodule SAT.Catalogs.Check do
 
     case Regex.run(~r/bytes\s+\d+-\d+\/(\d+)/i, content_range) do
       [_, length] ->
-        String.to_integer(length)
+        parse_integer(length)
 
       _ ->
         case response_header(headers, "content-length") do
           nil -> nil
-          length -> String.to_integer(length)
+          length -> parse_integer(length)
         end
+    end
+  end
+
+  defp parse_integer(value) do
+    case Integer.parse(value) do
+      {integer, ""} -> integer
+      _ -> nil
     end
   end
 
@@ -266,5 +289,9 @@ defmodule SAT.Catalogs.Check do
 
   defp result(source, status, reason) do
     %{id: source["id"], status: status, source: source, reason: reason}
+  end
+
+  defp packaged_manifest_path do
+    Application.app_dir(:sat_mexico, "priv/sources.json")
   end
 end
