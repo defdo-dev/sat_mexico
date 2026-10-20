@@ -1,0 +1,32 @@
+[
+  {
+    "id": "cfdi_40_catalogs",
+    "url": "http://omawww.sat.gob.mx/tramitesyservicios/Paginas/documentos/catCFDI_V_4_23032023.xls",
+    "discovery_url": "http://omawww.sat.gob.mx/tramitesyservicios/Paginas/anexo_20_version3-3.htm",
+    "discovery_match": "^catCFDI_V_4_.*\\.xls$",
+    "format": "xls",
+    "expected_sheet_name": "c_FormaPago",
+    "header_row": 6,
+    "cfdi_version": "4.0",
+    "complement_version": null,
+    "last_modified": "Fri, 24 Mar 2023 18:00:41 GMT",
+    "etag": "\"{ED736C5F-5653-4129-B417-D8B43217933C},1\"",
+    "sha256": "f10d87d907e52ce636b25a883eea83b81fa3bf77363cd7e47272176424f17dc0",
+    "checked_on": "2026-10-20"
+  },
+  {
+    "id": "cfdi_40_catalog_schema",
+    "url": "https://www.sat.gob.mx/sitio_internet/cfd/catalogos/catCFDI.xsd",
+    "discovery_url": "http://omawww.sat.gob.mx/tramitesyservicios/Paginas/anexo_20_version3-3.htm",
+    "discovery_match": "^catCFDI\\.xsd$",
+    "format": "xsd",
+    "expected_sheet_name": null,
+    "header_row": null,
+    "cfdi_version": "4.0",
+    "complement_version": null,
+    "last_modified": "Fri, 13 Dec 2024 19:59:34 GMT",
+    "etag": "\"e29ac5164fd253d5734a4d931127ecd2\"",
+    "sha256": "6c58936cb77576f839a4d7915953ceaf252b9eb9319f9458fe5bb67ae2bb0bb1",
+    "checked_on": "2026-10-20"
+  }
+]
