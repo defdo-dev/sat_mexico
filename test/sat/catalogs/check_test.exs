@@ -20,7 +20,9 @@ defmodule SAT.Catalogs.CheckTest do
     assert workbook["etag"] == "\"{E7E51874-8C0A-4E8B-9EC3-4283E85BBBD3},1\""
     assert length(workbook["expected_sheets"]) == 14
 
-    assert xsd["url"] == "http://www.sat.gob.mx/sitio_internet/cfd/catalogs/catCFDI.xsd"
+    assert xsd["url"] == "http://www.sat.gob.mx/sitio_internet/cfd/catalogos/catCFDI.xsd"
+    assert xsd["content_length"] == 5_984_046
+    assert xsd["sha256"] == "6c58936cb77576f839a4d7915953ceaf252b9eb9319f9458fe5bb67ae2bb0bb1"
     assert xsd["etag"] == "\"e29ac5164fd253d5734a4d931127ecd2\""
     refute Map.has_key?(xsd, "archive_member")
   end

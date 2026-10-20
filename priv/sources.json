@@ -84,8 +84,8 @@
       "id": "cfdi-4.0-catcfdi-xsd",
       "last_modified": "Fri, 13 Dec 2024 19:59:34 GMT",
       "last_modified_reliable": true,
-      "sha256": "a824bc7739e226e1b40ea0f8c4e4f4c6f796fc3b4abfa6e9abe3bd119a30d938",
-      "url": "http://www.sat.gob.mx/sitio_internet/cfd/catalogs/catCFDI.xsd"
+      "sha256": "6c58936cb77576f839a4d7915953ceaf252b9eb9319f9458fe5bb67ae2bb0bb1",
+      "url": "http://www.sat.gob.mx/sitio_internet/cfd/catalogos/catCFDI.xsd"
     }
   ],
   "verified_on": "2026-10-20",
