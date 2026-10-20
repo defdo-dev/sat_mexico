@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Track the current CFDI 4.0 workbook from SAT's Anexo 20 page and the canonical
+  `catCFDI.xsd`, and verify the workbook's expected sheets and header rows.
+- Discover SAT source revisions on every check, handle malformed length metadata
+  and HTML entities, and cover task exit behavior and `--update`.
+
 ## 0.2.1 (2026-06-29)
 
 - Relax `decimal` constraint to `~> 2.1 or ~> 3.0` for compatibility with

@@ -1,6 +1,9 @@
 defmodule SAT.Catalogs.CheckTest do
   use ExUnit.Case, async: false
 
+  import ExUnit.CaptureIO
+
+  alias Mix.Tasks.Sat.Catalogs.Check, as: CheckTask
   alias SAT.Catalogs.Check
 
   @body "safe synthetic SAT source bytes"
@@ -14,16 +17,43 @@ defmodule SAT.Catalogs.CheckTest do
     assert workbook["discovery_page_url"] ==
              "http://omawww.sat.gob.mx/tramitesyservicios/Paginas/anexo_20.htm"
 
+    assert workbook["discovery_link_text"] == "Catálogos CFDI Versión 4.0 (xls)"
     assert workbook["filename"] == "catCFDI_V_4_20261015.xls"
+
+    assert workbook["url"] ==
+             "http://omawww.sat.gob.mx/tramitesyservicios/Paginas/documentos/catCFDI_V_4_20261015.xls"
+
     assert workbook["content_length"] == 48_774_656
+    assert workbook["last_modified"] == "Thu, 15 Oct 2026 15:08:36 GMT"
     assert workbook["last_modified_reliable"]
     assert workbook["etag"] == "\"{E7E51874-8C0A-4E8B-9EC3-4283E85BBBD3},1\""
-    assert length(workbook["expected_sheets"]) == 14
+
+    assert workbook["sha256"] ==
+             "fde78b456d1e0d90366bfc68f8312f9edce5703ad5dc8ccebf09c462db13a079"
+
+    assert Enum.map(workbook["expected_sheets"], &{&1["sheet_name"], &1["header_row"]}) == [
+             {"c_RegimenFiscal", 6},
+             {"c_UsoCFDI", 5},
+             {"c_TipoDeComprobante", 5},
+             {"c_FormaPago", 6},
+             {"c_MetodoPago", 6},
+             {"c_Impuesto", 5},
+             {"c_TipoFactor", 5},
+             {"c_ObjetoImp", 5},
+             {"c_TipoRelacion", 5},
+             {"c_Exportacion", 5},
+             {"c_Moneda", 5},
+             {"c_Periodicidad", 5},
+             {"c_Meses", 5},
+             {"c_TasaOCuota", 5}
+           ]
 
     assert xsd["url"] == "http://www.sat.gob.mx/sitio_internet/cfd/catalogos/catCFDI.xsd"
     assert xsd["content_length"] == 5_984_046
     assert xsd["sha256"] == "6c58936cb77576f839a4d7915953ceaf252b9eb9319f9458fe5bb67ae2bb0bb1"
     assert xsd["etag"] == "\"e29ac5164fd253d5734a4d931127ecd2\""
+    assert xsd["last_modified"] == "Fri, 13 Dec 2024 19:59:34 GMT"
+    assert xsd["last_modified_reliable"]
     refute Map.has_key?(xsd, "archive_member")
   end
 
@@ -221,6 +251,40 @@ defmodule SAT.Catalogs.CheckTest do
     assert File.read!(path) == original_contents
   end
 
+  test "task succeeds for unchanged sources and fails for changed sources" do
+    output =
+      with_task_http(packaged_manifest_http(), fn ->
+        capture_io(fn -> assert is_nil(CheckTask.run([])) end)
+      end)
+
+    assert output == "cfdi-4.0-catalogs unchanged\ncfdi-4.0-catcfdi-xsd unchanged\n"
+
+    assert_raise Mix.Error, fn ->
+      with_task_http(packaged_manifest_http("cfdi-4.0-catalogs"), fn ->
+        capture_io(fn -> CheckTask.run([]) end)
+      end)
+    end
+  end
+
+  test "task --update writes refreshed metadata and still reports the changed source" do
+    path = manifest_path(source())
+    updated_headers = headers("\"etag-2\"")
+
+    http = fn
+      :head, _url -> {:ok, response(200, updated_headers, nil)}
+      :get, _url -> {:ok, response(200, updated_headers, @body)}
+    end
+
+    assert_raise Mix.Error, fn ->
+      with_task_config(discovery_http(http), path, fn ->
+        capture_io(fn -> CheckTask.run(["--update"]) end)
+      end)
+    end
+
+    assert {:ok, %{"sources" => [%{"etag" => "\"etag-2\"", "sha256" => @sha256}]}} =
+             path |> File.read!() |> Jason.decode()
+  end
+
   test "a stable validator still hashes content and stays unchanged when the hash matches" do
     path =
       source()
@@ -406,6 +470,65 @@ defmodule SAT.Catalogs.CheckTest do
 
       method, url ->
         http.(method, url)
+    end
+  end
+
+  defp with_task_config(http, path, fun) do
+    config_keys = [:catalogs_check_http, :catalogs_check_manifest_path]
+    previous = Enum.map(config_keys, &{&1, Application.fetch_env(:sat_mexico, &1)})
+
+    Application.put_env(:sat_mexico, :catalogs_check_http, http)
+    Application.put_env(:sat_mexico, :catalogs_check_manifest_path, path)
+
+    try do
+      fun.()
+    after
+      Enum.each(previous, fn
+        {key, {:ok, value}} -> Application.put_env(:sat_mexico, key, value)
+        {key, :error} -> Application.delete_env(:sat_mexico, key)
+      end)
+    end
+  end
+
+  defp with_task_http(http, fun) do
+    previous = Application.fetch_env(:sat_mexico, :catalogs_check_http)
+    Application.put_env(:sat_mexico, :catalogs_check_http, http)
+
+    try do
+      fun.()
+    after
+      case previous do
+        {:ok, value} -> Application.put_env(:sat_mexico, :catalogs_check_http, value)
+        :error -> Application.delete_env(:sat_mexico, :catalogs_check_http)
+      end
+    end
+  end
+
+  defp packaged_manifest_http(changed_id \\ nil) do
+    {:ok, %{"sources" => sources}} = "priv/sources.json" |> File.read!() |> Jason.decode()
+    discovery_url = hd(sources)["discovery_page_url"]
+
+    discovery_body =
+      Enum.map_join(sources, "\n", fn source ->
+        ~s(<a href="#{source["url"]}">#{source["discovery_link_text"]}</a>)
+      end)
+
+    fn
+      :get, ^discovery_url ->
+        {:ok, response(200, %{}, discovery_body)}
+
+      method, url when method in [:head, :get] ->
+        source = Enum.find(sources, &(&1["url"] == url)) || raise "unexpected source URL: #{url}"
+        etag = if source["id"] == changed_id, do: "\"changed-etag\"", else: source["etag"]
+
+        source_headers = %{
+          "last-modified" => [source["last_modified"]],
+          "etag" => [etag],
+          "content-length" => [Integer.to_string(source["content_length"])],
+          "content-disposition" => ["attachment; filename=\"#{source["filename"]}\""]
+        }
+
+        {:ok, response(200, source_headers, if(method == :get, do: @body))}
     end
   end
 
