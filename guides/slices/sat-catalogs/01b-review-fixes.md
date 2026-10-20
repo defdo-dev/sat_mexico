@@ -33,3 +33,14 @@ remove or weaken existing tests.
   invalid Content-Length, an `&aacute;` link text, the task exit status, and the
   update flag.
 - CHANGELOG Unreleased lists the fixes.
+
+## Verification
+```sh
+set -o pipefail
+mix format --check-formatted
+mix compile --warnings-as-errors
+mix test
+git diff --check
+```
+
+Escalation: two failed attempts at a finding → stop and report.
