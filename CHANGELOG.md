@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.0 (2026-10-21)
+
 - Track the current CFDI 4.0 workbook from SAT's Anexo 20 page and the canonical
   `catCFDI.xsd`; the manifest records expected workbook sheets and header rows,
   while the checker validates source metadata and content hashes.
