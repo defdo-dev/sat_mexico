@@ -71,7 +71,7 @@ defmodule SAT.Catalogs.Check do
   defp check_metadata(source, url, headers, http) do
     live_metadata = %{
       "url" => url,
-      "filename" => response_filename(headers) || source["filename"],
+      "filename" => response_filename(headers) || filename_from_url(url) || source["filename"],
       "last_modified" => response_header(headers, "last-modified"),
       "etag" => response_header(headers, "etag"),
       "content_length" => content_length(headers)
@@ -219,6 +219,19 @@ defmodule SAT.Catalogs.Check do
           [_, filename] -> String.trim(filename)
           _ -> nil
         end
+    end
+  end
+
+  defp filename_from_url(url) when is_binary(url) do
+    case URI.parse(url).path do
+      path when is_binary(path) ->
+        case path |> String.split("/") |> List.last() do
+          filename when is_binary(filename) and filename != "" -> URI.decode(filename)
+          _ -> nil
+        end
+
+      _ ->
+        nil
     end
   end
 

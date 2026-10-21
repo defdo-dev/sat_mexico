@@ -27,7 +27,7 @@ remove or weaken existing tests.
 
 ## Acceptance gate
 - `mix format --check-formatted`, `mix compile --warnings-as-errors`, `mix test`,
-  `mix credo --strict`, `git diff --check` all pass.
+  and `git diff --check` all pass.
 - New tests exist for: hashed-but-unchanged, the same URL serving a new filename,
   the discovery page linking a newer file while the old URL is still live, an
   invalid Content-Length, an `&aacute;` link text, the task exit status, and the

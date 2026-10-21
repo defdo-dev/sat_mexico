@@ -266,22 +266,44 @@ defmodule SAT.Catalogs.CheckTest do
     end
   end
 
-  test "task --update writes refreshed metadata and still reports the changed source" do
+  test "task --update writes the discovered URL and derived filename before reporting changed" do
     path = manifest_path(source())
-    updated_headers = headers("\"etag-2\"")
+    url = "https://example.invalid/documentos/catCFDI_V_4_20270115.xls"
+    updated_headers = headers() |> Map.delete("content-disposition")
 
     http = fn
-      :head, _url -> {:ok, response(200, updated_headers, nil)}
-      :get, _url -> {:ok, response(200, updated_headers, @body)}
+      :get, "https://example.invalid/discovery" ->
+        {:ok,
+         response(
+           200,
+           %{},
+           ~s(<a href="documentos/catCFDI_V_4_20270115.xls">Synthetic catalog</a>)
+         )}
+
+      :head, ^url ->
+        {:ok, response(200, updated_headers, nil)}
+
+      :get, ^url ->
+        {:ok, response(200, updated_headers, @body)}
     end
 
     assert_raise Mix.Error, fn ->
-      with_task_config(discovery_http(http), path, fn ->
+      with_task_config(http, path, fn ->
         capture_io(fn -> CheckTask.run(["--update"]) end)
       end)
     end
 
-    assert {:ok, %{"sources" => [%{"etag" => "\"etag-2\"", "sha256" => @sha256}]}} =
+    assert {:ok,
+            %{
+              "sources" => [
+                %{
+                  "url" => ^url,
+                  "filename" => "catCFDI_V_4_20270115.xls",
+                  "etag" => "\"etag-1\"",
+                  "sha256" => @sha256
+                }
+              ]
+            }} =
              path |> File.read!() |> Jason.decode()
   end
 
@@ -329,16 +351,10 @@ defmodule SAT.Catalogs.CheckTest do
       :head, ^new_url ->
         send(test_process, {:request, :head, new_url})
 
-        {:ok,
-         response(200, headers("\"etag-2\"", "Tue, 20 Oct 2026 15:01:00 GMT", "updated.xls"), nil)}
+        {:ok, response(200, headers(), nil)}
 
       :get, ^new_url ->
-        {:ok,
-         response(
-           200,
-           headers("\"etag-2\"", "Tue, 20 Oct 2026 15:01:00 GMT", "updated.xls"),
-           @body
-         )}
+        {:ok, response(200, headers(), @body)}
     end
 
     assert {:ok, [%{status: :changed, source: %{"url" => ^new_url}}]} =
@@ -360,11 +376,11 @@ defmodule SAT.Catalogs.CheckTest do
 
       :head, "https://example.invalid/source.xls" ->
         send(test_process, {:request, :head, "https://example.invalid/source.xls"})
-        new_headers = headers("\"etag-2\"", "Tue, 20 Oct 2026 15:01:00 GMT", "renamed.xls")
+        new_headers = headers("\"etag-1\"", "Tue, 20 Oct 2026 15:00:00 GMT", "renamed.xls")
         {:ok, response(200, new_headers, nil)}
 
       :get, "https://example.invalid/source.xls" ->
-        new_headers = headers("\"etag-2\"", "Tue, 20 Oct 2026 15:01:00 GMT", "renamed.xls")
+        new_headers = headers("\"etag-1\"", "Tue, 20 Oct 2026 15:00:00 GMT", "renamed.xls")
         {:ok, response(200, new_headers, @body)}
     end
 
